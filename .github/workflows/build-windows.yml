@@ -1,9 +1,10 @@
 name: Build Windows Release
-on:
-  push:
-    branches:
-    - main
-    - master
+on: [push]
+#on:
+#  push:
+#    branches:
+#    - main
+#    - master
 
 env:
   QT_VERSION: 5.15.2
@@ -17,10 +18,11 @@ jobs:
     - name: Add short SHA to env
       run: echo "GITHUB_SHA_SHORT=$(echo $env:GITHUB_SHA | cut -c 1-6)" >> $env:GITHUB_ENV
 
-    - name: Install Qt environment
+    - name: Install Qt environment using Chocolatey
       run: |
         choco install -y qt5-default --version ${{ env.QT_VERSION }}
         choco install -y cmake
+        choco install -y openssl
     
     - name: qmake
       run: "C:/Qt/${{ env.QT_VERSION }}/mingw81_64/bin/qmake.exe CloudLogCatQt.pro"
